@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-znh*g*querw6^!g-@1o)p(kn2dt)%dkv-sgw7bym^cm^9!v-ee
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["***"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -37,17 +37,29 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "rest_framework",
     "corsheaders",
-    "accounts",
-    "posts",
+    "rest_framework.authtoken",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "dj_rest_auth",
+    "dj_rest_auth.registration",
+    "posts.apps.PostsConfig",
+    "accounts.apps.AccountsConfig",
 ]
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ],
 }
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -72,7 +84,7 @@ ROOT_URLCONF = "blogapi.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "Templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -80,10 +92,15 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.request",
             ],
         },
     },
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+SITE_ID = 1
 
 WSGI_APPLICATION = "blogapi.wsgi.application"
 
